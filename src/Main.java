@@ -1,3 +1,5 @@
+package src;
+
 public class Main {
     static public int levenshteinDistance (CharSequence lhs, CharSequence rhs) {
         int len0 = lhs.length() + 1;
