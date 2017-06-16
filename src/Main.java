@@ -3,7 +3,7 @@ public class Main {
         int len0 = lhs.length() + 1;
         int len1 = rhs.length() + 1;
 
-        // the array of distances
+        // the  array of distances
         int[] cost = new int[len0];
         int[] newcost = new int[len0];
 
