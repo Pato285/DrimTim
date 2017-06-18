@@ -1,4 +1,4 @@
-
+import java.util.Arrays;
 
 public interface AuxFun{
 	
@@ -173,6 +173,27 @@ public interface AuxFun{
 		int number = (a.matches(".*\\d+.*")) ? 1 : 0; 
 		int special = (!a.matches("[A-Za-z0-9]*")) ? 1 : 0;
 		return ""+minus+mayus+number+special;
+	}
+	
+	public static String sortString(String a){
+		char[] charArray = a.toCharArray();
+		Arrays.sort(charArray);
+		return new String(charArray);
+	}
+	
+	public static String uniqueChars (String a){
+		String sorted = sortString(a);
+		String res = "";
+		char last = sorted.charAt(0);
+		res+=last;
+		for(int i = 0; i<sorted.length(); i++){
+			char c = sorted.charAt(i);
+			if(c!=last){
+				last=c;
+				res+=last;
+			}
+		}
+		return res;
 	}
 	
 	

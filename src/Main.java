@@ -13,6 +13,7 @@ public class Main implements AuxFun{
         
         BigInteger result = passwordStrengthMeter.iterationCount("aaaa");
         System.out.println(result);
+        System.out.println(AuxFun.uniqueChars("pass$woQsArñÑA@67d"));
     }
 
 }
