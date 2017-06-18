@@ -1,14 +1,21 @@
+<<<<<<< HEAD
 package src;
 
 public class Main {
     static public int levenshteinDistance (CharSequence lhs, CharSequence rhs) {
         int len0 = lhs.length() + 1;
         int len1 = rhs.length() + 1;
+=======
+import java.math.BigInteger;
+
+import com.devewm.pwdstrength.*;
+>>>>>>> refs/remotes/Pato285/master
 
         // the  array of distances
         int[] cost = new int[len0];
         int[] newcost = new int[len0];
 
+<<<<<<< HEAD
         // initial cost of skipping prefix in String s0
         for (int i = 0; i < len0; i++) cost[i] = i;
 
@@ -43,6 +50,18 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println(levenshteinDistance("hola","dsh"));
+=======
+    public static void main(String[] args){
+        System.out.println(AuxFun.levenshteinDistance("hola","dsh"));
+        System.out.println(AuxFun.maxSubsecuence("hola","dshoh"));
+        System.out.println(AuxFun.typesOfChars("hoA!la"));
+        
+        PasswordStrengthMeter passwordStrengthMeter = PasswordStrengthMeter.getInstance();
+        
+        BigInteger result = passwordStrengthMeter.iterationCount("aaaa");
+        System.out.println(result);
+        System.out.println(AuxFun.uniqueChars("pass$woQsArñÑA@67d"));
+>>>>>>> refs/remotes/Pato285/master
     }
 
 }
