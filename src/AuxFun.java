@@ -162,12 +162,10 @@ public interface AuxFun{
     }
 
 	public static String typesOfChars (String a){
-
-		int minus = 0, mayus = 0, number = 0, special = 0;
-		if(!a.equals(a.toUpperCase())) minus = 1;
-		if(!a.equals(a.toLowerCase())) mayus = 1;
-		if(a.matches(".*\\d+.*")) number = 1;
-		if(!a.matches("[A-Za-z0-9]*")) special = 1;
+		int minus = (!a.equals(a.toUpperCase())) ? 1 : 0;
+		int mayus = (!a.equals(a.toLowerCase())) ? 1 : 0;
+		int number = (a.matches(".*\\d+.*")) ? 1 : 0; 
+		int special = (!a.matches("[A-Za-z0-9]*")) ? 1 : 0;
 		return ""+minus+mayus+number+special;
 	}
 	
