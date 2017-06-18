@@ -2,7 +2,7 @@
 
 public class AuxFun {
 	
-	public String maxSubsecuence(String a, String b)
+	public static String maxSubsecuence(String a, String b)
 	{
 		//Largos de las palabras
 		int lenA = a.length();
@@ -48,7 +48,7 @@ public class AuxFun {
 		//Caso base fila 0
 		for(j = 1; j < lenB; j++)
 		{
-			if(a.charAt(0) == b.charAt(0))
+			if(a.charAt(0) == b.charAt(j))
 			{
 				mat[0][j] = 1;
 				procedencia[0][j] = 2;
@@ -59,6 +59,8 @@ public class AuxFun {
 				procedencia[0][j] = 0;
 			}
 		}
+		
+		
 		
 		//Caso general de encontrar largos
 		for(i = 1; i < lenA; i++)
