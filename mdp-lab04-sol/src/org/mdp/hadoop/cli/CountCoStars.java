@@ -87,21 +87,21 @@ public class CountCoStars {
 		}
 	}
 	
-	public static class UniqueMapper extends Mapper<Object, Text, Text, IntWritable>{
-		@Override
-		public void map(Object key, Text value, Context context)
-						throws IOException, InterruptedException {
-			String[] split = value.toString().split("\t");
-			context.write(new Text(AuxFun.uniqueChars(split[1])),new IntWritable(1));
-		}
-	}
-	
-	public static class UniqueSetMapper extends Mapper<Object, Text, IntWritable, IntWritable>{
+	public static class UniqueMapper extends Mapper<Object, Text, IntWritable, IntWritable>{
 		@Override
 		public void map(Object key, Text value, Context context)
 				throws IOException, InterruptedException {
 			String[] split = value.toString().split("\t");
 			context.write(new IntWritable(AuxFun.uniqueChars(split[1]).length()),new IntWritable(1));
+		}
+	}
+	
+	public static class UniqueSetMapper extends Mapper<Object, Text, Text, IntWritable>{
+		@Override
+		public void map(Object key, Text value, Context context)
+						throws IOException, InterruptedException {
+			String[] split = value.toString().split("\t");
+			context.write(new Text(AuxFun.uniqueChars(split[1])),new IntWritable(1));
 		}
 	}
 	
@@ -155,6 +155,17 @@ public class CountCoStars {
 		String inputLocation = otherArgs[0];
 		String outputLocation = otherArgs[1];
 		
+		String WholePassFileName = "asd"; 
+		String LengthFileName = "asd"; 
+		String TypeFileName = "asd"; 
+		String UniqueFileName = "asd"; 
+		String UniqueSetFileName = "asd"; 
+		String LevenshteinFileName = "asd"; 
+		String StrengthFileName = "asd"; 
+		String CharFileName = "asd"; 
+		
+		// Whole pass
+		
 		Job job = Job.getInstance(new Configuration());
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(IntWritable.class);
@@ -165,9 +176,135 @@ public class CountCoStars {
 		job.setReducerClass(SumReducer.class);
 		
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
-		FileOutputFormat.setOutputPath(job, new Path(outputLocation));
+		FileOutputFormat.setOutputPath(job, new Path(outputLocation + WholePassFileName));
 		
 		job.setJarByClass(CountCoStars.class);
 		job.waitForCompletion(true);
+		
+		// Length
+		
+		job = Job.getInstance(new Configuration());
+		job.setMapOutputKeyClass(IntWritable.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		job.setOutputKeyClass(IntWritable.class);
+		job.setOutputValueClass(IntWritable.class);
+		
+		job.setMapperClass(LengthMapper.class);
+		job.setReducerClass(SumReducer2.class);
+		
+		FileInputFormat.setInputPaths(job, new Path(inputLocation));
+		FileOutputFormat.setOutputPath(job, new Path(outputLocation + LengthFileName));
+		
+		job.setJarByClass(CountCoStars.class);
+		job.waitForCompletion(true);
+
+		
+		// Type
+		
+		job = Job.getInstance(new Configuration());
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		
+		job.setMapperClass(TypeMapper.class);
+		job.setReducerClass(SumReducer.class);
+		
+		FileInputFormat.setInputPaths(job, new Path(inputLocation));
+		FileOutputFormat.setOutputPath(job, new Path(outputLocation + TypeFileName));
+		
+		job.setJarByClass(CountCoStars.class);
+		job.waitForCompletion(true);
+
+		
+		// Unique
+		
+		job = Job.getInstance(new Configuration());
+		job.setMapOutputKeyClass(IntWritable.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		job.setOutputKeyClass(IntWritable.class);
+		job.setOutputValueClass(IntWritable.class);
+		
+		job.setMapperClass(UniqueMapper.class);
+		job.setReducerClass(SumReducer2.class);
+		
+		FileInputFormat.setInputPaths(job, new Path(inputLocation));
+		FileOutputFormat.setOutputPath(job, new Path(outputLocation + UniqueFileName));
+		
+		job.setJarByClass(CountCoStars.class);
+		job.waitForCompletion(true);
+
+		
+		// Unique set
+		
+		job = Job.getInstance(new Configuration());
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		
+		job.setMapperClass(UniqueSetMapper.class);
+		job.setReducerClass(SumReducer.class);
+		
+		FileInputFormat.setInputPaths(job, new Path(inputLocation));
+		FileOutputFormat.setOutputPath(job, new Path(outputLocation + UniqueSetFileName));
+		
+		job.setJarByClass(CountCoStars.class);
+		job.waitForCompletion(true);
+		
+		
+		// Levenshtein distance
+
+		job = Job.getInstance(new Configuration());
+		job.setMapOutputKeyClass(IntWritable.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		job.setOutputKeyClass(IntWritable.class);
+		job.setOutputValueClass(IntWritable.class);
+		
+		job.setMapperClass(LevenshteinDistanceMapper.class);
+		job.setReducerClass(SumReducer2.class);
+		
+		FileInputFormat.setInputPaths(job, new Path(inputLocation));
+		FileOutputFormat.setOutputPath(job, new Path(outputLocation + LevenshteinFileName));
+		
+		job.setJarByClass(CountCoStars.class);
+		job.waitForCompletion(true);
+		
+		
+		// Strength
+
+		job = Job.getInstance(new Configuration());
+		job.setMapOutputKeyClass(IntWritable.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		job.setOutputKeyClass(IntWritable.class);
+		job.setOutputValueClass(IntWritable.class);
+		
+		job.setMapperClass(PasswordStrengthMapper.class);
+		job.setReducerClass(SumReducer2.class);
+		
+		FileInputFormat.setInputPaths(job, new Path(inputLocation));
+		FileOutputFormat.setOutputPath(job, new Path(outputLocation + StrengthFileName));
+		
+		job.setJarByClass(CountCoStars.class);
+		job.waitForCompletion(true);
+		
+		
+		// Char
+
+		job = Job.getInstance(new Configuration());
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		
+		job.setMapperClass(CharMapper.class);
+		job.setReducerClass(SumReducer.class);
+		
+		FileInputFormat.setInputPaths(job, new Path(inputLocation));
+		FileOutputFormat.setOutputPath(job, new Path(outputLocation + CharFileName));
+		
+		job.setJarByClass(CountCoStars.class);
+		job.waitForCompletion(true);
+
 	}	
 }
