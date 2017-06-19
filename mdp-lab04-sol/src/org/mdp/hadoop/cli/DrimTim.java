@@ -22,7 +22,7 @@ import com.devewm.pwdstrength.PasswordStrengthMeter;
  * 
  * @author Aidan
  */
-public class CountCoStars {
+public class DrimTim {
 	
 	public static class WholePassMapper extends Mapper<Object, Text, Text, IntWritable>{
 		@Override
@@ -149,7 +149,7 @@ public class CountCoStars {
 		Configuration conf = new Configuration();
 		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 		if (otherArgs.length != 2) {
-			System.err.println("Usage: "+CountCoStars.class.getName()+" <in> <out>");
+			System.err.println("Usage: "+DrimTim.class.getName()+" <in> <out>");
 			System.exit(2);
 		}
 		String inputLocation = otherArgs[0];
@@ -178,7 +178,7 @@ public class CountCoStars {
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
 		FileOutputFormat.setOutputPath(job, new Path(outputLocation + WholePassFileName));
 		
-		job.setJarByClass(CountCoStars.class);
+		job.setJarByClass(DrimTim.class);
 		job.waitForCompletion(true);
 		
 		// Length
@@ -195,7 +195,7 @@ public class CountCoStars {
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
 		FileOutputFormat.setOutputPath(job, new Path(outputLocation + LengthFileName));
 		
-		job.setJarByClass(CountCoStars.class);
+		job.setJarByClass(DrimTim.class);
 		job.waitForCompletion(true);
 
 		
@@ -213,7 +213,7 @@ public class CountCoStars {
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
 		FileOutputFormat.setOutputPath(job, new Path(outputLocation + TypeFileName));
 		
-		job.setJarByClass(CountCoStars.class);
+		job.setJarByClass(DrimTim.class);
 		job.waitForCompletion(true);
 
 		
@@ -231,7 +231,7 @@ public class CountCoStars {
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
 		FileOutputFormat.setOutputPath(job, new Path(outputLocation + UniqueFileName));
 		
-		job.setJarByClass(CountCoStars.class);
+		job.setJarByClass(DrimTim.class);
 		job.waitForCompletion(true);
 
 		
@@ -249,7 +249,7 @@ public class CountCoStars {
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
 		FileOutputFormat.setOutputPath(job, new Path(outputLocation + UniqueSetFileName));
 		
-		job.setJarByClass(CountCoStars.class);
+		job.setJarByClass(DrimTim.class);
 		job.waitForCompletion(true);
 		
 		
@@ -267,7 +267,7 @@ public class CountCoStars {
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
 		FileOutputFormat.setOutputPath(job, new Path(outputLocation + LevenshteinFileName));
 		
-		job.setJarByClass(CountCoStars.class);
+		job.setJarByClass(DrimTim.class);
 		job.waitForCompletion(true);
 		
 		
@@ -285,7 +285,7 @@ public class CountCoStars {
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
 		FileOutputFormat.setOutputPath(job, new Path(outputLocation + StrengthFileName));
 		
-		job.setJarByClass(CountCoStars.class);
+		job.setJarByClass(DrimTim.class);
 		job.waitForCompletion(true);
 		
 		
@@ -303,7 +303,7 @@ public class CountCoStars {
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
 		FileOutputFormat.setOutputPath(job, new Path(outputLocation + CharFileName));
 		
-		job.setJarByClass(CountCoStars.class);
+		job.setJarByClass(DrimTim.class);
 		job.waitForCompletion(true);
 
 	}	

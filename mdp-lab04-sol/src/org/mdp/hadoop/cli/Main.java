@@ -21,7 +21,7 @@ public class Main {
 			if (args.length < 1) {
 				StringBuffer sb = new StringBuffer();
 				sb.append("missing <utility> arg where <utility> one of");
-				sb.append("\n\t"+WordCount.class.getSimpleName()+": Count the words in a file");
+				sb.append("\n\t"+DrimTim.class.getSimpleName()+": Process Project");
 				
 				usage(sb.toString());
 			}
