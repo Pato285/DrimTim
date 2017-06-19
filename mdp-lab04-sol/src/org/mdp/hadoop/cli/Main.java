@@ -12,7 +12,6 @@ public class Main {
 	
 	private static final String PREFIX = "org.mdp.hadoop.cli.";
 	private static final String USAGE = "usage: "+Main.class.getName();
-
 	/**
 	 * Main method
 	 * @param args Command line args, first of which is the utility to run

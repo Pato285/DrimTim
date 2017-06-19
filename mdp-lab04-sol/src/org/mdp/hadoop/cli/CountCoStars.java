@@ -90,7 +90,33 @@ public class CountCoStars {
 			context.write(key, new IntWritable(sum));
 		}
 	}
+	public static class WholePassMapper extends Mapper<Object, Text, Text, IntWritable>{
 
+	    /**
+	     * @throws InterruptedException 
+	     * 
+	     * This is the map method that you're goint to write. :)
+	     * 
+	     */
+	    @Override
+	    public void map(Object key, Text value, Context context)
+	            throws IOException, InterruptedException {
+	      String[] split = value.toString().split("\t");
+	      context.write(new Text(split[1]),new IntWritable(1));
+	    }
+	  }
+
+	  public static class WholePassReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+	    @Override
+	    public void reduce(Text key, Iterable<IntWritable> values, Context context) 
+	        throws IOException, InterruptedException {
+	      int sum = 0;
+	      for(IntWritable value : values) {
+	        sum += value.get();
+	      }
+	      context.write(key, new IntWritable(sum));
+	    }
+	  }
 	/**
 	 * Main method that sets up and runs the job
 	 * 
@@ -113,8 +139,8 @@ public class CountCoStars {
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		
-		job.setMapperClass(CountCoStarsMapper.class);
-		job.setReducerClass(CountCoStarsReducer.class);
+		job.setMapperClass(WholePassMapper.class);
+		job.setReducerClass(WholePassReducer.class);
 		
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
 		FileOutputFormat.setOutputPath(job, new Path(outputLocation));
