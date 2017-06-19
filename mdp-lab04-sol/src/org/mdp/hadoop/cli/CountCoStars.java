@@ -13,6 +13,8 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
+import com.devewm.pwdstrength.PasswordStrengthMeter;
+
 
 /**
  * Java class to add the counts of pairs of 
@@ -21,65 +23,23 @@ import org.apache.hadoop.util.GenericOptionsParser;
  * @author Aidan
  */
 public class CountCoStars {
-
-	/**
-	 * This is the Mapper Class. This sends key-value pairs to different machines
-	 * based on the key.
-	 * 
-	 * Remember that the generic is Mapper<InputKey, InputValue, MapKey, MapValue>
-	 * 
-	 * InputKey we don't care about (a LongWritable will be passed as the input
-	 * file offset, but we don't care; we can also set as Object)
-	 * 
-	 * InputKey will be Text: a line of the file
-	 * 
-	 * MapKey will be Text: the star pair
-	 * 
-	 * MapValue will be IntWritable: the star pair count
-	 * 
-	 * @author Aidan
-	 *
-	 */
-	public static class CountCoStarsMapper extends Mapper<Object, Text, Text, IntWritable>{
-
-		/**
-		 * @throws InterruptedException 
-		 * 
-		 * This is the map method that you're goint to write. :)
-		 * 
-		 */
+	
+	public static class WholePassMapper extends Mapper<Object, Text, Text, IntWritable>{
 		@Override
 		public void map(Object key, Text value, Context context)
 						throws IOException, InterruptedException {
 			String[] split = value.toString().split("\t");
-			context.write(new Text(split[0]),new IntWritable(Integer.parseInt(split[1])));
+			context.write(new Text(split[1]),new IntWritable(1));
 		}
 	}
 
 	/**
-	 * This is the Reducer Class.
+	 * Este mapea Text a ints.
 	 * 
-	 * This collects sets of key-value pairs with the same key on one machine. 
-	 * 
-	 * Remember that the generic is Reducer<MapKey, MapValue, OutputKey, OutputValue>
-	 * 
-	 * @author Aidan
+	 * @author Franco
 	 *
 	 */
-	public static class CountCoStarsReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
-
-		/**
-		 * @throws InterruptedException 
-		 * 
-		 * 
-		 * MapKey will be Text: the star pair
-		 * 
-		 * MapValue will be IntWritable: the raw star pair counts
-		 * 
-		 * OutputKey will be Text: the star pair
-		 * 
-		 * OutputValue will be IntWritable: the total star pair count
-		 */
+	public static class SumReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 		@Override
 		public void reduce(Text key, Iterable<IntWritable> values, Context context) 
 				throws IOException, InterruptedException {
@@ -90,6 +50,94 @@ public class CountCoStars {
 			context.write(key, new IntWritable(sum));
 		}
 	}
+	
+	public static class LengthMapper extends Mapper<Object, Text, IntWritable, IntWritable>{
+		@Override
+		public void map(Object key, Text value, Context context)
+						throws IOException, InterruptedException {
+			String[] split = value.toString().split("\t");
+			context.write(new IntWritable(split[0].length()),new IntWritable(1));
+		}
+	}
+
+	/**
+	 * Este mapea ints a ints.
+	 * 
+	 * @author Franco
+	 *
+	 */
+	public static class SumReducer2 extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
+		@Override
+		public void reduce(IntWritable key, Iterable<IntWritable> values, Context context) 
+				throws IOException, InterruptedException {
+			int sum = 0;
+			for(IntWritable value : values) {
+				sum += value.get();
+			}
+			context.write(key, new IntWritable(sum));
+		}
+	}
+	
+	public static class TypeMapper extends Mapper<Object, Text, Text, IntWritable>{
+		@Override
+		public void map(Object key, Text value, Context context)
+						throws IOException, InterruptedException {
+			String[] split = value.toString().split("\t");
+			context.write(new Text(AuxFun.typesOfChars(split[1])),new IntWritable(1));
+		}
+	}
+	
+	public static class UniqueMapper extends Mapper<Object, Text, Text, IntWritable>{
+		@Override
+		public void map(Object key, Text value, Context context)
+						throws IOException, InterruptedException {
+			String[] split = value.toString().split("\t");
+			context.write(new Text(AuxFun.uniqueChars(split[1])),new IntWritable(1));
+		}
+	}
+	
+	public static class UniqueSetMapper extends Mapper<Object, Text, IntWritable, IntWritable>{
+		@Override
+		public void map(Object key, Text value, Context context)
+				throws IOException, InterruptedException {
+			String[] split = value.toString().split("\t");
+			context.write(new IntWritable(AuxFun.uniqueChars(split[1]).length()),new IntWritable(1));
+		}
+	}
+	
+	public static class LevenshteinDistanceMapper extends Mapper<Object, Text, IntWritable, IntWritable>{
+		@Override
+		public void map(Object key, Text value, Context context)
+						throws IOException, InterruptedException {
+			String[] split = value.toString().split("\t");
+			context.write(new IntWritable(AuxFun.levenshteinDistance(split[0], split[1])),new IntWritable(1));
+		}
+	}
+	
+	public static class PasswordStrengthMapper extends Mapper<Object, Text, IntWritable, IntWritable>{
+		@Override
+		public void map(Object key, Text value, Context context)
+						throws IOException, InterruptedException {
+			String[] split = value.toString().split("\t");
+			PasswordStrengthMeter pw = PasswordStrengthMeter.getInstance();
+		    int tries = pw.iterationCount(split[1]).toString().length();
+			context.write(new IntWritable(tries),new IntWritable(1));
+		}
+	}
+	
+	public static class CharMapper extends Mapper<Object, Text, Text, IntWritable>{
+		@Override
+		public void map(Object key, Text value, Context context)
+						throws IOException, InterruptedException {
+			String[] split = value.toString().split("\t");
+			
+			char[] charArray = split[0].toCharArray();
+			for (int i = 0; i < charArray.length; i++) {
+				context.write(new Text(Character.toString(charArray[i])),new IntWritable(1));
+			}
+		}
+	}
+	
 
 	/**
 	 * Main method that sets up and runs the job
@@ -113,8 +161,8 @@ public class CountCoStars {
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		
-		job.setMapperClass(CountCoStarsMapper.class);
-		job.setReducerClass(CountCoStarsReducer.class);
+		job.setMapperClass(WholePassMapper.class);
+		job.setReducerClass(SumReducer.class);
 		
 		FileInputFormat.setInputPaths(job, new Path(inputLocation));
 		FileOutputFormat.setOutputPath(job, new Path(outputLocation));
